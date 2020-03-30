@@ -7,7 +7,7 @@ A gradle plugin based on [AspectJ](https://en.wikipedia.org/wiki/AspectJ) suppor
 * Specify the dependency in your root build.gradle file:
 ```
 dependencies {
-        classpath 'org.aspect.droid:plugin:1.0.0'
+    classpath 'org.aspect.droid:plugin:1.0.0'
 }
 ```
 
