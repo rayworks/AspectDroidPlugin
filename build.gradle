@@ -9,7 +9,7 @@ def gitUrl = 'https://github.com/rayworks/AspectDroidPlugin.git'
 
 group 'org.aspect.droid'
 // artifactId plugin
-version '1.0.0'
+version '1.0.1'
 
 repositories {
     google()
@@ -62,6 +62,15 @@ install {
             }
         }
     }
+}
+
+task('sourcesJar', type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
 }
 
 Properties properties = new Properties()
