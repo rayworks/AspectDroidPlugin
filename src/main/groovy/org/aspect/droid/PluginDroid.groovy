@@ -29,7 +29,7 @@ class PluginDroid implements Plugin<Project> {
         }
 
         project.dependencies {
-            compile "org.aspectj:aspectjrt:1.8.8"
+            compile "org.aspectj:aspectjrt:1.9.6"
         }
 
         variants.all { variant ->
@@ -44,10 +44,21 @@ class PluginDroid implements Plugin<Project> {
                         "-classpath", javaCompile.classpath.asPath,
                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
                 ]
+                String[] kotlinArgs = ["-showWeaveInfo",
+                                       "-1.5",
+                                       "-inpath", project.buildDir.path + "/tmp/kotlin-classes/" + fullName,
+                                       "-aspectpath", javaCompile.classpath.asPath,
+                                       "-d", project.buildDir.path + "/tmp/kotlin-classes/" + fullName,
+                                       "-classpath", javaCompile.classpath.asPath,
+                                       "-bootclasspath", project.android.bootClasspath.join(
+                        File.pathSeparator)]
+
                 log.debug "args: " + Arrays.toString(args)
 
                 MessageHandler handler = new MessageHandler(true)
                 new Main().run(args, handler)
+                new Main().run(kotlinArgs, handler)
+
                 for (IMessage message : handler.getMessages(null, true)) {
                     switch (message.getKind()) {
                         case IMessage.ABORT:
