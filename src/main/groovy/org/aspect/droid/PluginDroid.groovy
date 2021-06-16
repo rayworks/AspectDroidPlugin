@@ -46,14 +46,15 @@ class PluginDroid implements Plugin<Project> {
                 ]
                 String[] kotlinArgs = ["-showWeaveInfo",
                                        "-1.5",
-                                       "-inpath", project.buildDir.path + "/tmp/kotlin-classes/" + fullName,
+                                       "-inpath", project.buildDir.path + "/tmp/kotlin-classes/",
                                        "-aspectpath", javaCompile.classpath.asPath,
-                                       "-d", project.buildDir.path + "/tmp/kotlin-classes/" + fullName,
+                                       "-d", project.buildDir.path + "/tmp/kotlin-classes/",
                                        "-classpath", javaCompile.classpath.asPath,
-                                       "-bootclasspath", project.android.bootClasspath.join(
-                        File.pathSeparator)]
+                                       "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
+                ]
 
                 log.debug "args: " + Arrays.toString(args)
+                log.debug "kArgs : " + Arrays.toString(kotlinArgs)
 
                 MessageHandler handler = new MessageHandler(true)
                 new Main().run(args, handler)
