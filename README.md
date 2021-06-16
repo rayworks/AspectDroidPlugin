@@ -1,14 +1,14 @@
-# AspectDroidPlugin [ ![Download](https://api.bintray.com/packages/crayzhou/maven/AspectDroidPlugin/images/download.svg?version=1.0.1) ](https://bintray.com/crayzhou/maven/AspectDroidPlugin/1.0.1/link)
+# AspectDroidPlugin
 
 A gradle plugin based on [AspectJ](https://en.wikipedia.org/wiki/AspectJ) supports [AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming) on Android module conveniently.
 
-## usage
+## Usage
 
 * Configure your repository for the plugin
 ```
 repositories {
     maven {
-        url  "https://dl.bintray.com/crayzhou/maven"
+        url "https://jitpack.io"
     }
 }
 ```
@@ -16,11 +16,25 @@ repositories {
 * Specify the dependency in your root build.gradle file:
 ```
 dependencies {
-    classpath 'org.aspect.droid:plugin:1.0.1'
+    classpath 'com.github.rayworks:AspectDroidPlugin:0.1.1'
 }
 ```
 
 * Apply the plugin in your module
 ```
 apply plugin: 'org.aspect.droid'
-``` 
+```
+
+## Note
+
+For the compatibility with Kotlin code, please define the `Aspect` class in Kotlin.
+You also can check the sample project in [here](https://github.com/rayworks/DroidWeekly/tree/aop_test).
+
+## Credits
+
+* [aspectjx](https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx)
+
+* [dhaspject](https://github.com/dikeboy/dhaspject)
+
+* [Hugo by Jarke Wharton](https://github.com/JakeWharton/hugo)
+

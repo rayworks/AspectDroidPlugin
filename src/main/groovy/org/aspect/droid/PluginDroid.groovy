@@ -29,41 +29,63 @@ class PluginDroid implements Plugin<Project> {
         }
 
         project.dependencies {
-            compile "org.aspectj:aspectjrt:1.8.8"
+            compile "org.aspectj:aspectjrt:1.9.6"
         }
 
         variants.all { variant ->
-            JavaCompile javaCompile = variant.javaCompile
-            javaCompile.doLast {
-                String[] args = [
-                        "-showWeaveInfo",
-                        "-1.5",
-                        "-inpath", javaCompile.destinationDir.toString(),
-                        "-aspectpath", javaCompile.classpath.asPath,
-                        "-d", javaCompile.destinationDir.toString(),
-                        "-classpath", javaCompile.classpath.asPath,
-                        "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
-                ]
-                log.debug "args: " + Arrays.toString(args)
 
-                MessageHandler handler = new MessageHandler(true)
-                new Main().run(args, handler)
-                for (IMessage message : handler.getMessages(null, true)) {
-                    switch (message.getKind()) {
-                        case IMessage.ABORT:
-                        case IMessage.ERROR:
-                        case IMessage.FAIL:
-                            log.error message.message, message.thrown
-                            break
-                        case IMessage.WARNING:
-                            log.warn message.message, message.thrown
-                            break
-                        case IMessage.INFO:
-                            log.info message.message, message.thrown
-                            break
-                        case IMessage.DEBUG:
-                            log.debug message.message, message.thrown
-                            break
+            variant.outputs.all { output ->
+                JavaCompile javaCompile = variant.javaCompile
+
+                def fullName = ""
+                output.name.tokenize('-').eachWithIndex { token, index ->
+                    fullName = fullName + (index == 0 ? token : token.capitalize())
+                }
+                println(">>> fullname : $fullName")
+
+                javaCompile.doLast {
+                    String[] args = [
+                            "-showWeaveInfo",
+                            "-1.5",
+                            "-inpath", javaCompile.destinationDir.toString(),
+                            "-aspectpath", javaCompile.classpath.asPath,
+                            "-d", javaCompile.destinationDir.toString(),
+                            "-classpath", javaCompile.classpath.asPath,
+                            "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
+                    ]
+                    String[] kotlinArgs = ["-showWeaveInfo",
+                                           "-1.5",
+                                           "-inpath", project.buildDir.path + "/tmp/kotlin-classes/" + fullName,
+                                           "-aspectpath", javaCompile.classpath.asPath,
+                                           "-d", project.buildDir.path + "/tmp/kotlin-classes/" + fullName,
+                                           "-classpath", javaCompile.classpath.asPath,
+                                           "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
+                    ]
+
+                    log.debug "args: " + Arrays.toString(args)
+                    log.debug "kArgs : " + Arrays.toString(kotlinArgs)
+
+                    MessageHandler handler = new MessageHandler(true)
+                    new Main().run(args, handler)
+                    new Main().run(kotlinArgs, handler)
+
+                    for (IMessage message : handler.getMessages(null, true)) {
+                        switch (message.getKind()) {
+                            case IMessage.ABORT:
+                            case IMessage.ERROR:
+                            case IMessage.FAIL:
+                                log.error message.message, message.thrown
+                                break
+                            case IMessage.WARNING:
+                                log.warn message.message, message.thrown
+                                break
+                            case IMessage.INFO:
+                                log.info message.message, message.thrown
+                                break
+                            case IMessage.DEBUG:
+                                log.debug message.message, message.thrown
+                                break
+                        }
                     }
                 }
             }
