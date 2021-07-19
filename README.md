@@ -27,7 +27,8 @@ apply plugin: 'org.aspect.droid'
 
 ## Note
 
-For the compatibility with Kotlin code, please define the `Aspect` class in Kotlin.
+**For the compatibility with Kotlin code (if you've already mixed Java and Kotlin in the project), please define the class with `Aspect` Annotation in Kotlin.**
+
 You also can check the sample project in [here](https://github.com/rayworks/DroidWeekly/tree/aop_test).
 
 ## Credits
